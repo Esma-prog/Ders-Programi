@@ -1,0 +1,32 @@
+Datagride combobox ekleme ve kullanma
+
+load olayı
+dataGridView1.ColumnCount = 2;
+           dataGridView1.ColumnHeadersVisible = true;
+ 
+           dataGridView1.Columns[0].HeaderText = "saat";
+           dataGridView1.Columns[1].HeaderText = "ders";           
+           dataGridView1.Columns[2].HeaderText = "gun;
+            
+           DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
+           combo.Items.AddRange("", "", "");
+           combo.HeaderText = "Saat";            
+           dataGridView1.Columns.Add(combo);
+           int sayi = dataGridView1.Columns.Count-2;
+           dataGridView1.Columns[sayi].DisplayIndex = 0;   
+
+ilk olarak DataGridView’in EditingControlShowing olayına
+
+ComboBox cb = e.Control as ComboBox; if (cb != null)
+          {
+              cb.SelectedIndexChanged -= new EventHandler(cb_SelectedIndexChanged);
+              cb.SelectedIndexChanged += new EventHandler(cb_SelectedIndexChanged);
+          } yazıyoruz burada nesne eğer combobox ise cb.SelectedIndexChanged isimli olayı tetikliyoruz ve bu olay içinde combobox içindeki bilgileri okuma işlemini yapıyoruz. seçili olan değer o satırdaki ilk hücrenin içine ekleniyork
+
+public void cb_SelectedIndexChanged(object sender, EventArgs e)
+     {           
+         var gecerli = dataGridView1.CurrentCellAddress;
+         var gelen = sender as DataGridViewComboBoxEditingControl;
+         DataGridViewTextBoxCell hucre = (DataGridViewTextBoxCell)dataGridView1.Rows[gecerli.Y].Cells[0];
+         hucre.Value = gelen.EditingControlFormattedValue.ToString();
+     }
